@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-myapp-pod-from-webproject
+spec:
+  podSelector:
+    matchLabels:
+      deployment: mydb        # label of db proj
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            mynet: webproject       # label of web proj
+        podSelector:
+          matchLabels:
+            deployment: myapp       # label of web application pod in web proj.
+      ports:
+      - port: 3306
+        protocol: TCP
